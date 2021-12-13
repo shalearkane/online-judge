@@ -1,5 +1,9 @@
-Django
-django-background-tasks
-django-crispy-forms
-jsonfield
-typing-extensions
+asgiref==3.4.1
+Django==4.0
+django-background-tasks==1.2.5
+django-compat==1.0.15
+django-crispy-forms==1.13.0
+jsonfield==3.1.0
+six==1.16.0
+sqlparse==0.4.2
+typing_extensions==4.0.1
