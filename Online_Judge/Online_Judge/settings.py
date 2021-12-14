@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import firebase_admin
+from firebase_admin import credentials
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -38,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
+    'code_submissions',
     'background_task',
     'crispy_forms'
 ]
@@ -123,6 +126,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 # for compilation
 MAX_ATTEMPTS = 1
+
+cred = credentials.Certificate(os.path.join(BASE_DIR, 'service_account.json'))
+default_app = firebase_admin.initialize_app(cred)
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"  # crispy tags
 

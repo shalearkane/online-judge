@@ -21,14 +21,14 @@ def compile_run(submission_id):
 
     def done():
         os.system(f'rm -fr /home/guest/{submission_id}')
-    
+
 
     submission = Submission.objects.get(pk=submission_id)
     ques = submission.ques
     testcases = ques.testcases.all()
     lang = submission.lang
     data = submission.user.userdata
-    
+
     os.system(f'mkdir /home/guest/{submission_id}')
     DIR = f'/home/guest/{submission_id}'
 
@@ -42,7 +42,7 @@ def compile_run(submission_id):
 
         if lang == 'c':
             compile = os.system(f'gcc {DIR}/{submission_id}.{lang} -o {DIR}/{submission_id}')
-            
+
         if lang == 'cpp':
             compile = os.system(f'g++ {DIR}/{submission_id}.{lang} -o {DIR}/{submission_id}')
 
@@ -64,7 +64,7 @@ def compile_run(submission_id):
         cmd = f'{DIR}/{submission_id}'
     elif lang == 'py':
         cmd = f'python3 {DIR}/{submission_id}.{lang}'
-    
+
 
 
     # Testing begins...
@@ -73,14 +73,14 @@ def compile_run(submission_id):
         submission.save()
 
         with open(f'{DIR}/{submission_id}.tc', 'w') as f:
-            f.write(testcase.testcase) 
+            f.write(testcase.testcase)
         with open(f'{DIR}/{submission_id}.ans', 'w') as f:
             f.write(testcase.answer)
-        
+
         err_code = os.system(f'sudo su - guest -c "schroot -c compile-run -- timeout {ques.timelimit} {cmd} < {DIR}/{submission_id}.tc" > {DIR}/{submission_id}.out')
-        
+
         # err_code = os.system(f'timeout {ques.timelimit} {cmd} < {DIR}/{submission_id}.tc > {DIR}/{submission_id}.out')
-        
+
         if err_code == 31744:
             submission.verdict = f'Time Limit Exceeded on Testcase {i + 1}'
             submission.save()
@@ -96,9 +96,9 @@ def compile_run(submission_id):
             data.runtime += 1
             data.save()
             return
-        
+
         match = os.system(f'diff -ZB {DIR}/{submission_id}.out {DIR}/{submission_id}.ans')
-        
+
         if match != 0:
             submission.verdict = f'Wrong Answer on Testcase {i + 1}'
             submission.save()
@@ -106,7 +106,7 @@ def compile_run(submission_id):
             data.incorrect += 1
             data.save()
             return
-    
+
     data = submission.user.userdata
 
     submission.verdict = f'Correct Answer!!'
@@ -121,7 +121,7 @@ def compile_run(submission_id):
             data.tags["isnull"] = False
         else:
             data.tags[tag.name] = data.tags[tag.name] + 1
-    
+
     data.save()
 
     return
@@ -150,18 +150,18 @@ def home_page_blog(request, blog_id):
     cur_date=datetime.datetime.now()
     context = {"blog": blog, "notifications": mydata.notifications, "recent_subs": user.submissions.all().order_by('-id')[:5], "page_name": "home_page", "contests":contests, "cur_date":cur_date}
     return render(request,"users/home_page.html", context=context)
-    
+
 # Create your views here.
 def random_number():
     random_6_digut_number = random.randint(10**5, 10**6-1)
     return(random_6_digut_number)
 
 
-global glob_otp 
+global glob_otp
 
 def register(request):
     form = RegisterForm()
-    if request.method=="POST": 
+    if request.method=="POST":
         if 'otp2' in request.POST:
             glob_otp =  random_number()
             form = RegisterForm(request.POST)
@@ -195,7 +195,7 @@ def register(request):
 #            return render(request,"user/register.html",{
 #                "message":"Authentication failed: invalid otp"
 #            })
-#            
+#
 #    return render(request,"user/otp.html")
 
 

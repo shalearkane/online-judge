@@ -5,6 +5,8 @@
 __pycache__
 db.sqlite3
 media
+service_account.json
+realtimedbcreds.json
 
 # Backup files #
 *.bak
