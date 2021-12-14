@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'users',
     'code_submissions',
     'background_task',
-    'crispy_forms'
+    'crispy_forms',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
